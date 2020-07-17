@@ -1,0 +1,5 @@
+bin/
+conf/vhost/
+logs/
+data/
+htdocs/

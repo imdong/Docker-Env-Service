@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Command Directory
+run_dir=`pwd`
+
+# Switch to DES Directory
+base_dir=`dirname "$0"`
+base_dir=`dirname "${base_dir}"`
+cd "${base_dir}"
+
+# Introduce Configuration
+source ".env"
+
+# Get project directory
+projects_dir=`cd "${PROJECT_DIR}"; pwd`
+
+# Relative Path
+is_project_dir=false
+if [[ $run_dir == $projects_dir* ]]; then
+    is_project_dir=true
+    relative_path=${run_dir//${projects_dir}/}
+fi
+
+# DEBUG Show
+if $DEBUG; then
+    echo "run_dir: ${run_dir}";
+    echo "base_dir: ${base_dir}";
+    echo "projects_dir: ${projects_dir}"
+    echo "relative_path: ${relative_path}"
+    echo "is_project_dir: ${is_project_dir}"
+fi

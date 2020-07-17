@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# 容器名
+name=nginx
+
+# 引入基础目录
+source .base_run
+
+# 获取目录绝对地址
+cache_dir=$(cd ${COMPOSER_CACHE_DIR};pwd)
+
+# 执行命令
+docker-compose exec "${name}" nginx $@

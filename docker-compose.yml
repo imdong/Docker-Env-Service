@@ -1,0 +1,36 @@
+version: "3"
+
+networks:
+  default:
+
+services:
+  nginx:
+    image: nginx:${NGINX_VERSION}
+    ports:
+      - ${NGINX_HTTP_HOST_PORT}:80
+      - ${NGINX_HTTPS_HOST_PORT}:443
+    volumes:
+      - ${PROJECT_DIR}:/var/www/html/:rw
+      - ${NGINX_LOG_DIR}:/var/log/nginx/:rw
+      - ${NGINX_LIB_DIR}:/etc/nginx/lib/:ro
+      - ${NGINX_CONF_FILE}:/etc/nginx/nginx.conf:ro
+      - ${NGINX_VHOST_DIR}:/etc/nginx/conf.d/:ro
+      - ${CERTBOT_CONF_DIR}:/etc/letsencrypt:ro
+      - ${CERTBOT_WWW_DIR}:/var/www/letsencrypt:ro
+    environment:
+      TZ: ${TZ}
+    restart: always
+    networks:
+      - default
+
+  certbot:
+    image: certbot/certbot:${CERTBOT_VERSION}
+    volumes:
+      - ${CERTBOT_CONF_DIR}:/etc/letsencrypt:rw
+      - ${CERTBOT_WWW_DIR}:/var/www/letsencrypt:rw
+      - ${CERTBOT_LOG_DIR}:/var/log/letsencrypt:rw
+    restart: 'no'
+    networks:
+      - default
+    environment:
+      TZ: ${TZ}
