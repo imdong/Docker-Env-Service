@@ -1,7 +1,13 @@
 #!/bin/bash
 
-# 引入基础目录
-source .base_run
+# use base_init
+source .base_init
 
-# 执行命令
+# is use tools
+if [ "$1" != "" ] && [ -x "${run_dir}/tools/$1.sh" ]; then
+    source "${run_dir}/tools/$1.sh"
+    exit;
+fi
+
+# exec command
 docker-compose $@
