@@ -1,10 +1,5 @@
 {
-    "config": {
-        "platform": {
-            "php": "MAJOR.MINOR.PATCH",
-            "ext-something": "1"
-        }
-    },
+    "config": {},
     "repositories": {
         "packagist": {
             "type": "composer",
