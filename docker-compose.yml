@@ -15,7 +15,7 @@ services:
       - ${NGINX_LIB_DIR}:/etc/nginx/lib/:ro
       - ${NGINX_CONF_FILE}:/etc/nginx/nginx.conf:ro
       - ${NGINX_VHOST_DIR}:/etc/nginx/conf.d/:ro
-      - ${CERTBOT_CONF_DIR}:/etc/letsencrypt:ro
+      - ${CERTBOT_DATA_DIR}:/etc/letsencrypt:ro
       - ${CERTBOT_WWW_DIR}:/var/www/letsencrypt:ro
     environment:
       TZ: ${TZ}
@@ -26,7 +26,7 @@ services:
   certbot:
     image: certbot/certbot:${CERTBOT_VERSION}
     volumes:
-      - ${CERTBOT_CONF_DIR}:/etc/letsencrypt:rw
+      - ${CERTBOT_DATA_DIR}:/etc/letsencrypt:rw
       - ${CERTBOT_WWW_DIR}:/var/www/letsencrypt:rw
       - ${CERTBOT_LOG_DIR}:/var/log/letsencrypt:rw
     restart: 'no'
