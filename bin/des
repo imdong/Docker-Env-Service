@@ -4,8 +4,8 @@
 source .base_init
 
 # is use tools
-if [ "$1" != "" ] && [ -x "${run_dir}/tools/$1.sh" ]; then
-    source "${run_dir}/tools/$1.sh"
+if [ "$1" != "" ] && [ -x "${base_dir}/bin/tools/$1.sh" ]; then
+    source "${base_dir}/bin/tools/$1.sh"
     exit;
 fi
 
