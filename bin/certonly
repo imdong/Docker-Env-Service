@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# 容器名
+container_name=certbot
+
+# 引入基础目录
+source .base_run
+
+# 执行命令
+docker-compose exec "${container_name}" certonly $@
