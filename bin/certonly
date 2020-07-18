@@ -7,4 +7,4 @@ container_name=certbot
 source .base_run
 
 # 执行命令
-docker-compose exec "${container_name}" certonly $@
+docker-compose run ${container_name} certonly --webroot $@
