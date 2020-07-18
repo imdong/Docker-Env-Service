@@ -4,7 +4,7 @@
 container_name=nginx
 
 # 引入基础目录
-source .base_run
+source .base_init
 
 # 执行命令
 docker-compose exec "${container_name}" nginx $@
