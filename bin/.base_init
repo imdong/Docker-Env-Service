@@ -15,14 +15,15 @@ source ".env"
 projects_dir=`cd "${PROJECT_DIR}"; pwd`
 
 # Relative Path
-is_project_dir=false
+workdir=''
 if [[ $run_dir == $projects_dir* ]]; then
-    is_project_dir=true
+    workdir='/var/www/html/'
     relative_path=${run_dir//${projects_dir}/}
 fi
 
 # DEBUG Show
 if $DEBUG; then
+    echo "workdir: ${workdir}"
     echo "run_dir: ${run_dir}";
     echo "base_dir: ${base_dir}";
     echo "projects_dir: ${projects_dir}"

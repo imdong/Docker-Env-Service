@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# 容器名
+container_name=php73
+
+# 引入基础目录
+source .base_init
+
+# 非项目目录不能允许
+if [ "${workdir}" == "" ];then
+    echo "Must be run in the project directory"
+    exit 127
+fi
+
+# 执行命令
+docker-compose run --rm --workdir="${workdir}" ${container_name} composer $@

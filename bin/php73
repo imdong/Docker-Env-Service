@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# 容器名
+container_name=php73
+
+# 引入基础目录
+source .base_init
+
+full_args=$@
+
+# 考虑 composer/vendor/bin 的情况
+composer_dir=`cd "${COMPOSER_CACHE_DIR}"; pwd`
+arg_file=$1
+if [[ $arg_file == $composer_dir* ]]; then
+    full_args=${@//${composer_dir}/'/usr/local/composer'}
+fi
+
+
+# 非项目目录不能允许
+if [ "${workdir}" == "" ];then
+    echo "Must be run in the project directory"
+    exit 127
+fi
+
+
+# 执行命令
+docker-compose run --rm --workdir="${workdir}" ${container_name} php ${full_args}

@@ -1,0 +1,14 @@
+{
+    "config": {
+        "platform": {
+            "php": "MAJOR.MINOR.PATCH",
+            "ext-something": "1"
+        }
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://mirrors.aliyun.com/composer/"
+        }
+    }
+}

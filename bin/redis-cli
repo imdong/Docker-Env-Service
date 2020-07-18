@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # 容器名
-container_name=certbot
+container_name=redis
 
 # 引入基础目录
 source .base_init
 
 # 执行命令
-docker-compose run --rm ${container_name} $@
+docker-compose exec "${container_name}" redis-cli $@

@@ -27,6 +27,19 @@ DES 基于 Docker 的一键环境包，可以作为开发环境使用。
 - `README.md` 本说明文档
 - `sample.env` 配置文件模板，使用前请更名为 `.env`
 
+## 快捷命令
+
+如需使用 `bin` 目录下的指令，需要在 `.baserc` or `.zshrc` 等文件中添加如下指令：
+`export PATH="/pathto/Docker-Env-Service/bin":$PATH`
+
+如需使用 `composer/bin` 需要在 `.baserc` or `.zshrc` 等文件中添加如下指令:
+`export PATH=/pathto/Docker-Env-Service/data/composer/vendor/bin:$PATH`
+
+如果你的默认 php 文件名不为 php，如为 `php73` 则要正常使用 `composer/vendor/bin` 有两个选择：
+
+- 将 `php73` 更名为 `php`
+- 修改 `composer/vendor/bin` 中每个文件的行首，将 `php` 改为 `php73`
+
 ## 常用命令
 
 ### 证书操作

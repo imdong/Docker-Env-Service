@@ -7,4 +7,4 @@ container_name=certbot
 source .base_init
 
 # 执行命令
-docker-compose run -rm ${container_name} certonly --webroot -w "/var/www/letsencrypt" $@
+docker-compose run --rm ${container_name} certonly --webroot -w "/var/www/letsencrypt" $@
