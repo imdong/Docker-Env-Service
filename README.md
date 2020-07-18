@@ -26,3 +26,11 @@ DES 基于 Docker 的一键环境包，可以作为开发环境使用。
 - `projects` 项目代码目录
 - `README.md` 本说明文档
 - `sample.env` 配置文件模板，使用前请更名为 `.env`
+
+## 常用命令
+
+### 证书操作
+
+- 创建证书: `certonly --noninteractive --agree-tos -m {email} -d {domain} -d...`
+- 删除证书: `certbot delete`
+- 证书续期: `certbot renew`
