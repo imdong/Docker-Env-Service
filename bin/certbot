@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # 容器名
-container_name=nginx
+container_name=certbot
 
 # 引入基础目录
 source .base_init
 
 # 执行命令
-docker-compose exec "${container_name}" nginx $@
+docker-compose run --rm ${container_name} $@

@@ -15,22 +15,95 @@ services:
       - ${NGINX_LIB_DIR}:/etc/nginx/lib/:ro
       - ${NGINX_CONF_FILE}:/etc/nginx/nginx.conf:ro
       - ${NGINX_VHOST_DIR}:/etc/nginx/conf.d/:ro
-      - ${CERTBOT_CONF_DIR}:/etc/letsencrypt:ro
+      - ${CERTBOT_DATA_DIR}:/etc/letsencrypt:ro
       - ${CERTBOT_WWW_DIR}:/var/www/letsencrypt:ro
-    environment:
-      TZ: ${TZ}
     restart: always
     networks:
       - default
+    environment:
+      TZ: "${TZ}"
 
   certbot:
     image: certbot/certbot:${CERTBOT_VERSION}
     volumes:
-      - ${CERTBOT_CONF_DIR}:/etc/letsencrypt:rw
+      - ${CERTBOT_DATA_DIR}:/etc/letsencrypt:rw
       - ${CERTBOT_WWW_DIR}:/var/www/letsencrypt:rw
       - ${CERTBOT_LOG_DIR}:/var/log/letsencrypt:rw
     restart: 'no'
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     networks:
       - default
     environment:
-      TZ: ${TZ}
+        TZ: "${TZ}"
+
+  mysql:
+    image: mariadb:${MARIADB_VERSION}
+    ports:
+      - "${MYSQL_HOST_PORT}:3306"
+    volumes:
+      - ${MYSQL_CONF_FILE}:/etc/mysql/conf.d/mysql.cnf:ro
+      - ${MYSQL_DATA_DIR}:/var/lib/mysql/:rw
+      - ${MYSQL_LOG_DIR}:/var/log/mysql/:rw
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      TZ: "${TZ}"
+    networks:
+      - default
+
+  redis:
+    image: redis:${REDIS_VERSION}
+    command: redis-server /etc/redis/redis.conf
+    ports:
+      - "${REDIS_HOST_PORT}:6379"
+    volumes:
+      - ${REDIS_CONF_FILE}:/etc/redis/redis.conf:ro
+      - ${REDIS_DATA_DIR}:/data/:rw
+    environment:
+      TZ: "${TZ}"
+    restart: always
+    networks:
+      - default
+
+  php73:
+    build:
+      context: ./build/php73/
+      args:
+        PHP_VERSION: ${PHP73_VERSION}
+        ALPINE_REPOSITORIES: ${ALPINE_REPOSITORIES}
+        PHP_EXTENSIONS: ${PHP73_EXTENSIONS}
+        MORE_EXTENSION_INSTALLER: php73.sh
+        TZ: "${TZ}"
+    volumes:
+      - ${PROJECT_DIR}:/var/www/html/:rw
+      - ${PHP73_PHP_CONF_FILE}:/usr/local/etc/php/php.ini:ro
+      - ${PHP73_FPM_CONF_FILE}:/usr/local/etc/php-fpm.d/www.conf:rw
+      - ${PHP73_LOG_DIR}:/var/log/php
+      - ${COMPOSER_CACHE_DIR}:/usr/local/composer
+      - ${COMPOSER_CONFIG_FILE}:/usr/local/composer/config.json
+    restart: always
+    cap_add:
+      - SYS_PTRACE
+    networks:
+      - default
+
+  node:
+    image: node:${NODE_VERSION}
+    volumes:
+      - ${PROJECT_DIR}:/var/www/html/:rw
+      - ${NODE_HOME}:/var/node/:rw
+    environment:
+      TZ: "${TZ}"
+    restart: 'no'
+    networks:
+      - default
+
+  golang:
+    image: golang:${GOLANG_VERSION}
+    volumes:
+      - ${PROJECT_DIR}:/var/www/html/:rw
+    environment:
+      TZ: "${TZ}"
+    restart: 'no'
+    networks:
+      - default
