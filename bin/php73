@@ -4,7 +4,7 @@
 container_name=php73
 
 # 引入基础目录
-source .base_init
+source "`dirname $0`/.base_init"
 
 full_args=$@
 
@@ -13,15 +13,19 @@ composer_dir=`cd "${COMPOSER_CACHE_DIR}"; pwd`
 arg_file=$1
 if [[ $arg_file == $composer_dir* ]]; then
     full_args=${@//${composer_dir}/'/usr/local/composer'}
+    if [ "${workdir}" == "" ];then
+        workdir="/var/www/html/"
+    fi
 fi
 
 
 # 非项目目录不能允许
 if [ "${workdir}" == "" ];then
-    echo "Must be run in the project directory"
-    exit 127
+    workdir='/var/www/html/'
+    # echo "Must be run in the project directory"
+    # exit 127
 fi
 
 
 # 执行命令
-docker-compose run --rm --workdir="${workdir}" ${container_name} php ${full_args}
+docker-compose run --rm --workdir="${workdir}/${relative_path}" ${container_name} php ${full_args}

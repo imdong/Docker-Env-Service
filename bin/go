@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# 容器名
+container_name=golang
+
+# 引入基础目录
+source "`dirname $0`/.base_init"
+
+# 非项目目录不能允许
+if [ "${workdir}" == "" ];then
+    # workdir='/var/www/html/'
+    echo "Must be run in the project directory"
+    exit 127
+fi
+
+# 执行命令
+docker-compose run --rm --workdir="${workdir}/${relative_path}" "${container_name}" go $@

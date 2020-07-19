@@ -36,7 +36,6 @@ services:
     environment:
         TZ: "${TZ}"
 
-
   mysql:
     image: mariadb:${MARIADB_VERSION}
     ports:
@@ -85,5 +84,26 @@ services:
     restart: always
     cap_add:
       - SYS_PTRACE
+    networks:
+      - default
+
+  node:
+    image: node:${NODE_VERSION}
+    volumes:
+      - ${PROJECT_DIR}:/var/www/html/:rw
+      - ${NODE_HOME}:/var/node/:rw
+    environment:
+      TZ: "${TZ}"
+    restart: 'no'
+    networks:
+      - default
+
+  golang:
+    image: golang:${GOLANG_VERSION}
+    volumes:
+      - ${PROJECT_DIR}:/var/www/html/:rw
+    environment:
+      TZ: "${TZ}"
+    restart: 'no'
     networks:
       - default
