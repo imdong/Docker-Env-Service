@@ -65,6 +65,20 @@ services:
     networks:
       - default
 
+  mongo:
+    image: mongo:${MONGODB_VERSION}
+    ports:
+      - "${MONGODB_HOST_PORT}:27017"
+    volumes:
+      - ${MONGODB_DATA_DIR}:/data/db:rw
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      TZ: "${TZ}"
+    restart: always
+    networks:
+      - default
+
   php73:
     build:
       context: ./build/php73/
