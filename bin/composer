@@ -13,4 +13,4 @@ if [ "${workdir}" == "" ];then
 fi
 
 # 执行命令
-docker-compose run --rm --workdir="${workdir}" ${container_name} composer $@
+docker-compose run --rm --workdir="${workdir}/${relative_path}" ${container_name} composer $@
