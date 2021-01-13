@@ -1,5 +1,5 @@
 ARG PHP_VERSION
-FROM php:${PHP_VERSION}-fpm-alpine
+FROM php:${PHP_VERSION}-fpm-alpine3.12
 
 ARG ALPINE_REPOSITORIES
 RUN if [ "${ALPINE_REPOSITORIES}" != "" ]; then \
