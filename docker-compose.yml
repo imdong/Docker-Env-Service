@@ -3,6 +3,20 @@ version: "3"
 networks:
   default:
 
+volumes:
+    nfs_project:
+        driver: local
+        driver_opts:
+            type: nfs
+            o: addr=host.docker.internal,rw,nolock,hard,nointr,nfsvers=3
+            device: ":/System/Volumes/Data${PWD}/${PROJECT_DIR}"
+    nfs_data:
+        driver: local
+        driver_opts:
+            type: nfs
+            o: addr=host.docker.internal,rw,nolock,hard,nointr,nfsvers=3
+            device: ":/System/Volumes/Data${PWD}/data"
+
 services:
   nginx:
     image: nginx:${NGINX_VERSION}
@@ -10,7 +24,7 @@ services:
       - ${NGINX_HTTP_HOST_PORT}:80
       - ${NGINX_HTTPS_HOST_PORT}:443
     volumes:
-      - ${PROJECT_DIR}:/var/www/html/:rw
+      - nfshtml:/var/www/html/:rw
       - ${NGINX_LOG_DIR}:/var/log/nginx/:rw
       - ${NGINX_LIB_DIR}:/etc/nginx/lib/:ro
       - ${NGINX_CONF_FILE}:/etc/nginx/nginx.conf:ro
@@ -91,7 +105,7 @@ services:
         MORE_EXTENSION_INSTALLER: php.sh
         TZ: "${TZ}"
     volumes:
-      - ${PROJECT_DIR}:/var/www/html/:rw
+      - nfshtml:/var/www/html/:rw
       - ${PHP74_PHP_CONF_FILE}:/usr/local/etc/php/php.ini:ro
       - ${PHP74_FPM_CONF_FILE}:/usr/local/etc/php-fpm.d/www.conf:rw
       - ${PHP74_LOG_DIR}:/var/log/php
@@ -102,3 +116,27 @@ services:
       - SYS_PTRACE
     networks:
       - default
+<<<<<<< Updated upstream
+=======
+
+  node:
+    image: node:${NODE_VERSION}
+    volumes:
+      - nfshtml:/var/www/html/:rw
+      - ${NODE_HOME}:/var/node/:rw
+    environment:
+      TZ: "${TZ}"
+    restart: 'no'
+    networks:
+      - default
+
+  golang:
+    image: golang:${GOLANG_VERSION}
+    volumes:
+      - nfshtml:/var/www/html/:rw
+    environment:
+      TZ: "${TZ}"
+    restart: 'no'
+    networks:
+      - default
+>>>>>>> Stashed changes
