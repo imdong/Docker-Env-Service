@@ -24,20 +24,20 @@ services:
       TZ: "${TZ}"
 
   certbot:
-    image: certbot/certbot:${CERTBOT_VERSION}
+    image: certbot/certbot
     volumes:
       - ${CERTBOT_DATA_DIR}:/etc/letsencrypt:rw
       - ${CERTBOT_WWW_DIR}:/var/www/letsencrypt:rw
       - ${CERTBOT_LOG_DIR}:/var/log/letsencrypt:rw
-    restart: 'no'
+    restart: "no"
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     networks:
       - default
     environment:
-        TZ: "${TZ}"
+      TZ: "${TZ}"
 
   mysql:
-    image: mariadb:${MARIADB_VERSION}
+    image: ${DBSQL_TYPE}:${DBSQL_VERSION}
     ports:
       - "${MYSQL_HOST_PORT}:3306"
     volumes:
@@ -68,6 +68,10 @@ services:
   mongo:
     image: mongo:${MONGO_VERSION}
     restart: always
+    volumes:
+      - ${MONGO_CONF_PATH}:/etc/mongod.conf
+      - ${MONGO_DATA_DIR}:/data/db
+      - ${MONGO_LOG_DIR}:/data/log
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: "${MONGO_ROOT_PASSWORD}"
@@ -91,7 +95,7 @@ services:
         MORE_EXTENSION_INSTALLER: php.sh
         TZ: "${TZ}"
     volumes:
-      - ${PROJECT_DIR}:/var/www/html/:rw
+      - ${PROJECT_DIR}:/var/www/html:rw
       - ${PHP74_PHP_CONF_FILE}:/usr/local/etc/php/php.ini:ro
       - ${PHP74_FPM_CONF_FILE}:/usr/local/etc/php-fpm.d/www.conf:rw
       - ${PHP74_LOG_DIR}:/var/log/php
@@ -103,3 +107,16 @@ services:
     networks:
       - default
 
+  zsh:
+    build:
+      context: ./build/ohmyzsh/
+      args:
+        COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
+        PROXY: ${PROXY}
+    restart: "no"
+    environment:
+      PROXY: ${PROXY}
+    volumes:
+      - ${ZSH_RC_CONF}:/root/.zshrc
+      - ${ZSH_HISTORY}:/root/.zsh_history
+      - ${ZSH_OHMYZSH_DIR}:/root/.oh-my-zsh
