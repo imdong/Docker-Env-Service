@@ -8,14 +8,15 @@ DES 基于 Docker 的一键环境包，可以作为开发环境使用。
 
 - Nginx
 - MariaDB
-- PHP (7.3 / Composer)
+- PHP (7.4 / Composer)
 - Redis
 - MongoDB
-- Node.js (npm)
 - Certbot
-- Golang
+- OhMyZsh (for php)
 
-各目录/文件功能说明：
+> 针对 mac 下磁盘效率低下问题，使用 nfs 方式优化文件加载速度。
+
+## 各目录/文件功能说明：
 
 - `docker-compose.yml` Docker Compose 主配置文件
 - `bin` 用于映射到系统无缝体验
