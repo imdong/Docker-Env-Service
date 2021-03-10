@@ -5,11 +5,10 @@ action="run --rm"
 
 # 需要 exec 操作的容器
 exec_containers=(
-    "mongo-express"
     "mongo"
     "mysql"
     "nginx"
-    "php73"
+    "php74"
     "redis"
 )
 
@@ -17,9 +16,15 @@ exec_containers=(
 container_name=$2
 
 # 判断执行方式
-if [[ "${exec_containers[@]}"  =~ "${container_name}" ]]; then
+if [[ "${exec_containers[@]}" =~ "${container_name}" ]]; then
     action="exec"
 fi
 
+# 判断使用什么 shell
+shell="sh"
+if [[ "php74" = "${container_name}" ]]; then
+    shell="zsh"
+fi
+
 # 执行进入容器
-docker-compose ${action} --workdir="${workdir}/${relative_path}" ${container_name} sh
+docker-compose ${action} --workdir="${workdir}/${relative_path}" ${container_name} ${shell}

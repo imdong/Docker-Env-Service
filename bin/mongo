@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# 容器名
+container_name=mongo
+
+# 引入基础目录
+source .base_init
+
+# 执行命令
+docker-compose exec "${container_name}" mongo $@

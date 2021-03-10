@@ -1,0 +1,18 @@
+version: "3"
+
+volumes:
+  nfs_project:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=host.docker.internal,rw,nolock,hard,nointr,nfsvers=3
+      device: ":/System/Volumes/Data${PWD}/${PROJECT_DIR}"
+
+services:
+  nginx:
+    volumes:
+      - nfs_project:/var/www/html/:rw
+
+  php74:
+    volumes:
+      - nfs_project:/var/www/html:rw
