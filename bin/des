@@ -9,5 +9,11 @@ if [ "$1" != "" ] && [ -x "${base_dir}/bin/tools/$1.sh" ]; then
     exit;
 fi
 
+# mac
+mac_ext=""
+if [ `uname -s` == "Darwin" ]; then
+    mac_ext="-f docker-compose.mac.yml"
+fi
+
 # exec command
-docker-compose $@
+docker-compose -f docker-compose.yml ${mac_ext} $@
